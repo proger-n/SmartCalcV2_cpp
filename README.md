@@ -140,4 +140,4 @@ Provide a special mode "deposit profitability calculator" (you can take banki.ru
 - Input: deposit amount, deposit term, interest rate, tax rate, periodicity of payments, capitalization of interest, replenishments list, partial withdrawals list
 - Output: accrued interest, tax amount, deposit amount by the end of the term
 
-💡 [Tap here](https://forms.yandex.ru/cloud/64181abec769f101d44293de/) **to leave your feedback on the project**. Pedago Team really tries to make your educational experience better.
+💡 [Tap here](https://forms.yandex.ru/cloud/64181abec769f101d44293de/) **to leave your feedback on the project**. Product Team really tries to make your educational experience better.
