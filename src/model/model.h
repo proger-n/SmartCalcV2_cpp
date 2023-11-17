@@ -1,7 +1,11 @@
 #ifndef S21_SMARTCALC
 #define S21_SMARTCALC
-#include <map>
+#include <iostream>
+#include <string>
 #include <vector>
+#include <list>
+#include <stack>
+#include <tuple>
 
 namespace s21 {
 
@@ -32,21 +36,23 @@ class Model {
     NOTHING
   } type_t;
 
-  typedef struct lexem_struct {
-    double value;
-    int priority;
-    struct lexem_struct* next;
-    type_t type;
-  } lexem_t;
-  struct res_stack {
-    double val[255];
-    int amount;
-  };
-  std::vector<std::pair<double, type_t>> lexem;
+  // typedef struct lexem_struct {
+  //   double value;
+  //   int priority;
+  //   struct lexem_struct* next;
+  //   type_t type;
+  // } lexem_t;
+  // struct res_stack {
+  //   double val[255];
+  //   int amount;
+  // };
 
  public:
+  std::list<std::tuple<double, int, type_t>> lexem; // value, priority, type
+  std::stack<std::pair<double, int>> res_stack;
   Model() = default;
   ~Model() = default;
+  int rr;
 
   // void set_string(std::string s);
 };
