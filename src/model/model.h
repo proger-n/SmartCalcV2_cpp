@@ -1,5 +1,7 @@
 #ifndef S21_SMARTCALC
 #define S21_SMARTCALC
+#include <map>
+#include <vector>
 
 namespace s21 {
 
@@ -40,10 +42,13 @@ class Model {
     double val[255];
     int amount;
   };
+  std::vector<std::pair<double, type_t>> lexem;
 
  public:
   Model() = default;
   ~Model() = default;
+
+  // void set_string(std::string s);
 };
 
 }  // namespace s21
