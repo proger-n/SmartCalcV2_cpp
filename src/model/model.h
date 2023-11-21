@@ -1,17 +1,18 @@
 #ifndef S21_SMARTCALC
 #define S21_SMARTCALC
+#include <algorithm>
 #include <iostream>
-#include <string>
-#include <vector>
 #include <list>
 #include <stack>
+#include <string>
 #include <tuple>
+#include <vector>
 
 namespace s21 {
 
 class Model {
- private:
-  typedef enum {
+ public:
+  enum Type_t {
     NUMBER,
     X,
     BRACE_OPEN,
@@ -34,7 +35,7 @@ class Model {
     MULT,
     POW,
     NOTHING
-  } type_t;
+  };
 
   // typedef struct lexem_struct {
   //   double value;
@@ -48,13 +49,25 @@ class Model {
   // };
 
  public:
-  std::list<std::tuple<double, int, type_t>> lexem; // value, priority, type
+  std::string input_string;
+  int x_exist = 0;
+  double x_value;
+  double result;
+  std::list<std::tuple<double, int, Type_t>> lexem;  // value, priority, type
   std::stack<std::pair<double, int>> res_stack;
   Model() = default;
   ~Model() = default;
   int rr;
 
-  // void set_string(std::string s);
+  // BOUND WITH CONTROLLER
+  void setInput(std::string input);
+  double getResult();
+
+  // INNER METHODS
+  int head_calc();
+  int validationInput();
+  void add_zero_before_minus(std::string input, size_t minus_index);
+  void removeSpaces();
 };
 
 }  // namespace s21
