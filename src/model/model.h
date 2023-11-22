@@ -1,6 +1,7 @@
 #ifndef S21_SMARTCALC
 #define S21_SMARTCALC
 #include <algorithm>
+#include <cmath>
 #include <iostream>
 #include <list>
 #include <stack>
@@ -33,8 +34,7 @@ class Model {
     MINUS,
     DIV,
     MULT,
-    POW,
-    NOTHING
+    POW
   };
 
   // typedef struct lexem_struct {
@@ -54,7 +54,7 @@ class Model {
   double x_value;
   double result;
   std::list<std::tuple<double, int, Type_t>> lexem;  // value, priority, type
-  std::stack<std::pair<double, int>> res_stack;
+  std::vector<double> res_stack;
   Model() = default;
   ~Model() = default;
   int rr;
@@ -71,6 +71,13 @@ class Model {
   int search_num(size_t* i, double* number);
   int search_substr(std::string search_str, size_t len_input_str, size_t* i,
                     size_t count_char_after);
+  int search_operand(size_t i, Model::Type_t* en, int* priority);
+  int rpn_and_calculate();
+  int calculate();
+  int is_func_unary(Model::Type_t type);
+  double unary_func_using(Model::Type_t type, double val);
+  int is_func_binary(Model::Type_t type);
+  double binary_func_using(Model::Type_t type, double val_1, double val_2);
 };
 
 }  // namespace s21

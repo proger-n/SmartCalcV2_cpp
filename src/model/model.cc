@@ -4,7 +4,8 @@ int Model::head_calc() {
   int ret = 0;
   std::cout << "INPUT: " << input_string << "\n";
   if (!validationInput() && !parsingInput()) {
-    ret = 1;
+    std::cout << "lexem count before rpn: " << lexem.size() << "\n";
+    if (rpn_and_calculate()) ret = 1;
   }
   return ret;
 }
@@ -59,6 +60,7 @@ int Model::validationInput() {
       }
     }
   }
+  std::cout << "VALIDATION return: " << ret << "\n";
   return ret;
 }
 
@@ -69,56 +71,59 @@ void Model::removeSpaces() {
 }
 
 int Model::parsingInput() {
-  int ret = 0, en = 0, priority = 0;
+  int ret = 0, priority = 0;
+  Model::Type_t en = Model::PLUS;
   size_t len_input_str = input_string.size();
   double number = 0;
   for (size_t i = 0; i < len_input_str && !ret; i++) {
     if (search_num(&i, &number)) {
-      lexem.push_back({number, 0, s21::Model::NUMBER});
+      lexem.push_back({number, 0, Model::NUMBER});
     } else if (search_substr("sin(", len_input_str, &i, 2)) {
-      lexem.push_back({0, 4, s21::Model::SIN});
-      lexem.push_back({0, -1, s21::Model::BRACE_OPEN});
+      lexem.push_back({0, 4, Model::SIN});
+      lexem.push_back({0, -1, Model::BRACE_OPEN});
+    } else if (search_substr("cos(", len_input_str, &i, 2)) {
+      lexem.push_back({0, 4, Model::COS});
+      lexem.push_back({0, -1, Model::BRACE_OPEN});
+    } else if (search_substr("tan(", len_input_str, &i, 2)) {
+      lexem.push_back({0, 4, Model::TAN});
+      lexem.push_back({0, -1, Model::BRACE_OPEN});
+    } else if (search_substr("asin(", len_input_str, &i, 2)) {
+      lexem.push_back({0, 4, Model::ASIN});
+      lexem.push_back({0, -1, Model::BRACE_OPEN});
+    } else if (search_substr("acos(", len_input_str, &i, 2)) {
+      lexem.push_back({0, 4, Model::ACOS});
+      lexem.push_back({0, -1, Model::BRACE_OPEN});
+    } else if (search_substr("atan(", len_input_str, &i, 2)) {
+      lexem.push_back({0, 4, Model::ATAN});
+      lexem.push_back({0, -1, Model::BRACE_OPEN});
+    } else if (search_substr("log(", len_input_str, &i, 2)) {
+      lexem.push_back({0, 4, Model::LOG});
+      lexem.push_back({0, -1, Model::BRACE_OPEN});
+    } else if (search_substr("ln(", len_input_str, &i, 2)) {
+      lexem.push_back({0, 4, Model::LN});
+      lexem.push_back({0, -1, Model::BRACE_OPEN});
+    } else if (search_substr("sqrt(", len_input_str, &i, 2)) {
+      lexem.push_back({0, 4, Model::SQRT});
+      lexem.push_back({0, -1, Model::BRACE_OPEN});
+    } else if (search_substr("mod", len_input_str, &i, 1)) {
+      lexem.push_back({0, 2, Model::MOD});
+    } else if (search_operand(i, &en, &priority)) {
+      lexem.push_back({0, priority, en});
+    } else if (input_string[i] == '(') {
+      if (i + 1 < len_input_str && input_string[i + 1] != ')')
+        lexem.push_back({0, -1, Model::BRACE_OPEN});
+    } else if (input_string[i] == ')') {
+      if ((i + 1 < len_input_str && input_string[i + 1] != '(') ||
+          i + 1 == len_input_str)
+        lexem.push_back({0, 5, Model::BRACE_CLOSE});
+    } else {
+      // std::cout << "i= " << i << "\n";
+      // std::cout << "char= " << input_string[i] << "\n";
+      ret = 1;
+      lexem.clear();
     }
-    // else if (search_substr(input, "cos(", len_input_str, &i, 2)) {
-    //   push(list, 0, 4, COS);
-    //   push(list, 0, -1, BRACE_OPEN);
-    // } else if (search_substr(input, "tan(", len_input_str, &i, 2)) {
-    //   push(list, 0, 4, TAN);
-    //   push(list, 0, -1, BRACE_OPEN);
-    // } else if (search_substr(input, "asin(", len_input_str, &i, 2)) {
-    //   push(list, 0, 4, ASIN);
-    //   push(list, 0, -1, BRACE_OPEN);
-    // } else if (search_substr(input, "acos(", len_input_str, &i, 2)) {
-    //   push(list, 0, 4, ACOS);
-    //   push(list, 0, -1, BRACE_OPEN);
-    // } else if (search_substr(input, "atan(", len_input_str, &i, 2)) {
-    //   push(list, 0, 4, ATAN);
-    //   push(list, 0, -1, BRACE_OPEN);
-    // } else if (search_substr(input, "log(", len_input_str, &i, 2)) {
-    //   push(list, 0, 4, LOG);
-    //   push(list, 0, -1, BRACE_OPEN);
-    // } else if (search_substr(input, "ln(", len_input_str, &i, 2)) {
-    //   push(list, 0, 4, LN);
-    //   push(list, 0, -1, BRACE_OPEN);
-    // } else if (search_substr(input, "sqrt(", len_input_str, &i, 2)) {
-    //   push(list, 0, 4, SQRT);
-    //   push(list, 0, -1, BRACE_OPEN);
-    // } else if (search_substr(input, "mod", len_input_str, &i, 1)) {
-    //   push(list, 0, 2, MOD);
-    // } else if (search_operand(input, i, &en, &priority)) {
-    //   push(list, 0, priority, en);
-    // } else if (input[i] == '(') {
-    //   if (i + 1 < len_input_str && input[i + 1] != ')')
-    //     push(list, 0, -1, BRACE_OPEN);
-    // } else if (input[i] == ')') {
-    //   if ((i + 1 < len_input_str && input[i + 1] != '(') ||
-    //       i + 1 == len_input_str)
-    //     push(list, 0, 5, BRACE_CLOSE);
-    // } else {
-    //   ret = 1;
-    //   delete_stack(list);
-    // }
   }
+  std::cout << "PARSING return: " << ret << "\n";
   return ret;
 }
 
@@ -133,7 +138,7 @@ int Model::search_num(size_t* i, double* number) {
   } else if (std::string("0123456789").find(input_string[*i]) !=
              std::string::npos) {
     found = 1;
-    for (; found && std::string("0123456789").find(input_string[*i]) !=
+    for (; found && std::string("0123456789.,").find(input_string[*i]) !=
                         std::string::npos;
          (*i)++) {
       buf.push_back(input_string[*i] == ',' ? '.' : input_string[*i]);
@@ -176,6 +181,186 @@ int Model::search_substr(std::string search_str, size_t len_input_str,
     found = 0;
   *i = found ? (i_old + len_search_str - 1) : i_old;
   return found;
+}
+
+int Model::search_operand(size_t i, Model::Type_t* en, int* priority) {
+  int found = 0;
+  if (std::string("+-^*/").find(input_string[i]) != std::string::npos) {
+    found = 1;
+    if (input_string[i] == '+') {
+      *en = Model::PLUS;
+      *priority = 1;
+    }
+    if (input_string[i] == '-') {
+      *en = Model::MINUS;
+      *priority = 1;
+    }
+    if (input_string[i] == '*') {
+      *en = Model::MULT;
+      *priority = 2;
+    }
+    if (input_string[i] == '/') {
+      *en = Model::DIV;
+      *priority = 2;
+    }
+    if (input_string[i] == '^') {
+      *en = Model::POW;
+      *priority = 3;
+    }
+  }
+  return found;
+}
+
+int Model::rpn_and_calculate() {
+  int ret = 0;
+  // reverse_stack(&list);
+  std::list<std::tuple<double, int, Model::Type_t>> ready_list, support_list,
+      temp_support;
+  if (lexem.size()) {
+    do {
+      std::list<std::tuple<double, int, Model::Type_t>> temp_lexeme;
+      temp_lexeme.push_back(lexem.front());
+      lexem.pop_front();
+      if (std::get<2>(temp_lexeme.back()) == Model::BRACE_CLOSE) {
+        while (support_list.size() &&
+               std::get<2>(support_list.back()) != Model::BRACE_OPEN) {
+          temp_support.push_back(support_list.back());
+          support_list.pop_back();
+          ready_list.push_back(temp_support.back());
+          // temp_support.clear();  // del maybe
+          temp_support.push_back(support_list.back());
+        }
+        if (support_list.size()) support_list.pop_back();
+      } else if (std::get<2>(temp_lexeme.back()) == Model::BRACE_OPEN) {
+        support_list.push_back(temp_lexeme.back());
+      } else if (std::get<2>(temp_lexeme.back()) == Model::NUMBER ||
+                 std::get<2>(temp_lexeme.back()) == Model::X) {
+        ready_list.push_back(temp_lexeme.back());
+      } else if (std::get<2>(temp_lexeme.back()) != Model::NUMBER) {
+        // temp_support.clear();
+        temp_support.push_back(support_list.back());
+        for (; temp_support.size() && std::get<1>(temp_support.back()) >=
+                                          std::get<1>(temp_lexeme.back());) {
+          temp_support.push_back(support_list.back());
+          if (support_list.size()) support_list.pop_back();
+          ready_list.push_back(temp_support.back());
+          // temp_support.clear();
+          temp_support.push_back(support_list.back());
+        }
+        support_list.push_back(temp_lexeme.back());
+      }
+    } while (lexem.size());
+    std::cout << ready_list.size() << " ";
+    std::cout << support_list.size() << " ";
+    std::cout << temp_support.size() << " ";
+
+    while (support_list.size()) {
+      temp_support.push_back(support_list.back());
+      support_list.pop_back();
+      ready_list.push_back(temp_support.back());
+      // temp_support.clear();
+      temp_support.push_back(support_list.back());
+    }
+    std::cout << "\nReady list count: " << ready_list.size() << "\n";
+    lexem = ready_list;
+    // for (; !lexem.empty(); lexem.pop_front())
+    //   std::cout << "lexem:" << std::get<0>(lexem.front()) << "\n";
+    // reverse_stack(&ready_list);
+    ret = calculate();
+  } else
+    ret = 1;
+  return ret;
+}
+
+int Model::calculate() {
+  int ret = 0;
+  // struct res_stack res;
+  int i = 0;
+  std::cout << "lexem size: " << lexem.size() << "\n";
+  res_stack.reserve(lexem.size());
+  // std::list<std::tuple<double, int, Model::Type_t>> current_lexeme;
+  if (lexem.size()) {
+    do {
+      std::cout << "lexem:" << std::get<0>(lexem.front()) << "\n";
+      // current_lexeme.push_back(lexem.front());
+      if (std::get<2>(lexem.front()) == Model::NUMBER) {
+        // std::cout << "Good\n";
+        res_stack[i] = std::get<0>(lexem.front());
+        i++;
+      } else if (is_func_unary(std::get<2>(lexem.front()))) {
+        res_stack[i - 1] =
+            unary_func_using(std::get<2>(lexem.front()), res_stack[i - 1]);
+      } else if (is_func_binary(std::get<2>(lexem.front()))) {
+        res_stack[i - 2] = binary_func_using(
+            std::get<2>(lexem.front()), res_stack[i - 2], res_stack[i - 1]);
+        i--;
+      }
+      lexem.pop_front();
+    } while (lexem.size());
+    std::cout << "stack top: " << res_stack[0] << "\n";
+    result = res_stack[0];
+  } else
+    ret = 1;
+
+  return ret;
+}
+
+int Model::is_func_unary(Model::Type_t type) {
+  int ret = 0;
+  if (type == Model::SIN || type == Model::COS || type == Model::TAN ||
+      type == Model::ASIN || type == Model::ACOS || type == Model::ATAN ||
+      type == Model::LN || type == Model::LOG || type == Model::SQRT)
+    ret = 1;
+  return ret;
+}
+
+double Model::unary_func_using(Model::Type_t type, double val) {
+  double result = 0.0;
+  if (type == SIN)
+    result = std::sin(val);
+  else if (type == COS)
+    result = std::cos(val);
+  else if (type == TAN)
+    result = std::tan(val);
+  else if (type == ACOS)
+    result = std::acos(val);
+  else if (type == ASIN)
+    result = std::asin(val);
+  else if (type == ATAN)
+    result = std::atan(val);
+  else if (type == LN)
+    result = std::log(val);
+  else if (type == LOG)
+    result = std::log10(val);
+  else if (type == SQRT)
+    result = std::sqrt(val);
+  return result;
+}
+
+int Model::is_func_binary(Model::Type_t type) {
+  int ret = 0;
+  if (type == Model::PLUS || type == Model::MINUS || type == Model::MULT ||
+      type == Model::DIV || type == Model::MOD || type == Model::POW)
+    ret = 1;
+  return ret;
+}
+
+double Model::binary_func_using(Model::Type_t type, double val_1,
+                                double val_2) {
+  double result = 0.0;
+  if (type == Model::PLUS)
+    result = val_1 + val_2;
+  else if (type == Model::MINUS)
+    result = val_1 - val_2;
+  else if (type == Model::MULT)
+    result = val_1 * val_2;
+  else if (type == Model::DIV)
+    result = val_1 / val_2;
+  else if (type == Model::MOD)
+    result = std::fmod(val_1, val_2);
+  else if (type == Model::POW)
+    result = std::pow(val_1, val_2);
+  return result;
 }
 
 }  // namespace s21

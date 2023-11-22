@@ -17,13 +17,16 @@ int main() {
   // std::cout << x.res_stack.top().first << "\n";
   // std::cout << std::get<0>(x.lexem.front()) << "\n";
 
-  std::string input = "sin(-5)+(2.3)-   sin(3)/ln(7)";
+  std::string input =
+      "asin(0.3) + acos(0.7) - ln(10)*log(10) + tan(0.4)*atan(0.4)";
   // std::cout << input[0];
   x.setInput(input);
+  std::cout << "before calc RESULT: " << x.input_string << "\n";
   x.head_calc();
-  std::cout << "RESULT: " << x.input_string << "\n";
-  std::cout << "VALIDATION RESULT: " << x.validationInput() << "\n";
-  std::cout << "RESULT: " << x.input_string << "\n";
+  // std::cout << "VALIDATION RESULT: " << x.validationInput() << "\n";
+  std::cout << "after calc  RESULT STRING: " << x.input_string << "\n";
   std::cout << std::get<2>(x.lexem.front()) << "\n";
+  std::cout << "lexem count after rpn: " << x.lexem.size() << "\n";
+  std::cout << "after calc  RESULT: " << x.result << "\n";
   return 0;
 }
