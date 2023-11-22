@@ -66,8 +66,11 @@ class Model {
   // INNER METHODS
   int head_calc();
   int validationInput();
-  void add_zero_before_minus(std::string input, size_t minus_index);
   void removeSpaces();
+  int parsingInput();
+  int search_num(size_t* i, double* number);
+  int search_substr(std::string search_str, size_t len_input_str, size_t* i,
+                    size_t count_char_after);
 };
 
 }  // namespace s21
