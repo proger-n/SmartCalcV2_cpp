@@ -18,8 +18,8 @@ class Graph : public QDialog {
   ~Graph();
 
  private:
-  Ui::Graph* ui;
-  s21::Controller controller;
+  Ui::Graph* ui_;
+  s21::Controller controller_;
 };
 
 #endif  // CPP3_SMARTCALC_V2_0_VIEW_GRAPH_H_

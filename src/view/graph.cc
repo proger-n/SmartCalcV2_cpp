@@ -3,10 +3,10 @@
 #include "ui_graph.h"
 
 Graph::Graph(s21::Controller controller, QWidget *parent)
-    : QDialog(parent), ui(new Ui::Graph), controller(controller) {
-  ui->setupUi(this);
-  double x_min = ui->doubleSpinBox_min_x->value();
-  double x_max = ui->doubleSpinBox_max_x->value();
+    : QDialog(parent), ui_(new Ui::Graph), controller_(controller) {
+  ui_->setupUi(this);
+  double x_min = ui_->doubleSpinBox_min_x->value();
+  double x_max = ui_->doubleSpinBox_max_x->value();
   if ((x_max - x_min) > 0) {
     double h = (x_max - x_min) / 10000;
     double y_min = 0;
@@ -14,10 +14,10 @@ Graph::Graph(s21::Controller controller, QWidget *parent)
     QVector<double> x, y;
     double Y;
 
-    ui->widget->xAxis->setRange(x_min, x_max);
+    ui_->widget->xAxis->setRange(x_min, x_max);
     for (double X = x_min; X <= x_max; X += h) {
-      controller.SetX(X);
-      std::string res = controller.GetResult();
+      controller_.SetX(X);
+      std::string res = controller_.GetResult();
       if (res != "ERROR") {
         x.push_back(X);
         Y = std::stod(res);
@@ -27,14 +27,14 @@ Graph::Graph(s21::Controller controller, QWidget *parent)
       }
     }
 
-    ui->widget->yAxis->setRange(y_min, y_max);
-    ui->widget->addGraph();
-    ui->widget->graph(0)->addData(x, y);
-    ui->widget->graph(0)->setLineStyle(QCPGraph::lsNone);
-    ui->widget->graph(0)->setScatterStyle(
+    ui_->widget->yAxis->setRange(y_min, y_max);
+    ui_->widget->addGraph();
+    ui_->widget->graph(0)->addData(x, y);
+    ui_->widget->graph(0)->setLineStyle(QCPGraph::lsNone);
+    ui_->widget->graph(0)->setScatterStyle(
         QCPScatterStyle(QCPScatterStyle::ssCircle, 2));
-    ui->widget->replot();
+    ui_->widget->replot();
   }
 }
 
-Graph::~Graph() { delete ui; }
+Graph::~Graph() { delete ui_; }

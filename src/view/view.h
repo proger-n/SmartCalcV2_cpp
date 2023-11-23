@@ -11,7 +11,7 @@ namespace Ui {
 class MainWindow;
 }
 QT_END_NAMESPACE
-
+namespace s21 {
 class MainWindow : public QMainWindow {
   Q_OBJECT
 
@@ -20,9 +20,8 @@ class MainWindow : public QMainWindow {
   ~MainWindow();
 
  private:
-  Ui::MainWindow* ui;
-  Graph* graph;
-  s21::Controller controller;
+  Ui::MainWindow* ui_;
+  s21::Controller controller_;
 
  private slots:
   void KeyNumber();
@@ -32,4 +31,5 @@ class MainWindow : public QMainWindow {
   void Calc();
   void KeyGraph();
 };
+}  // namespace s21
 #endif  // VIEW_H
