@@ -11,17 +11,17 @@ CONFIG += c++17
 SOURCES += \
     ../model/model.cc \
     ../controller/controller.cc \
-#    graph.cpp \
-    main.cpp \
-    mainwindow.cpp \
-    qcustomplot.cpp
+    graph.cc \
+    main.cc \
+    qcustomplot.cc \
+    view.cc
 
 HEADERS += \
     ../model/model.h \
     ../controller/controller.h \
-#    graph.h \
-    mainwindow.h \
-    qcustomplot.h
+    graph.h \
+    qcustomplot.h \
+    view.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -30,7 +30,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 FORMS += \
     graph.ui \
-    mainwindow.ui
+    view.ui
 
 DISTFILES += \
     calculator.pro.user

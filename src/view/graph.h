@@ -1,5 +1,5 @@
-#ifndef GRAPH_H
-#define GRAPH_H
+#ifndef CPP3_SMARTCALC_V2_0_VIEW_GRAPH_H_
+#define CPP3_SMARTCALC_V2_0_VIEW_GRAPH_H_
 
 #include <QDialog>
 #include <QVector>
@@ -14,16 +14,12 @@ class Graph : public QDialog {
   Q_OBJECT
 
  public:
-  explicit Graph(QWidget* parent = nullptr);
+  explicit Graph(s21::Controller controller, QWidget* parent = nullptr);
   ~Graph();
 
  private:
   Ui::Graph* ui;
-
- public slots:
-  void slot(QString str_inp);
-  void slot_min(double min_x);
-  void slot_max(double max_x);
+  s21::Controller controller;
 };
 
-#endif  // GRAPH_H
+#endif  // CPP3_SMARTCALC_V2_0_VIEW_GRAPH_H_

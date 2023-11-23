@@ -15,7 +15,11 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="QCustomPlot" name="widget" native="true"/>
+    <widget class="QCustomPlot" name="widget" native="true">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
+    </widget>
    </item>
    <item>
     <widget class="QFrame" name="frame">
@@ -54,16 +58,6 @@
       </property>
       <property name="value">
        <double>100.000000000000000</double>
-      </property>
-     </widget>
-     <widget class="QTextEdit" name="textEdit">
-      <property name="geometry">
-       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>982</width>
-        <height>526</height>
-       </rect>
       </property>
      </widget>
      <widget class="QDoubleSpinBox" name="doubleSpinBox_min_x">

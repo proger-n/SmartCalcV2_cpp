@@ -1,5 +1,5 @@
-#ifndef EXAMPLECONTROLLER_H
-#define EXAMPLECONTROLLER_H
+#ifndef CPP3_SMARTCALC_V2_0_CONTROLLER_CONTROLLER_H_
+#define CPP3_SMARTCALC_V2_0_CONTROLLER_CONTROLLER_H_
 
 #include "../model/model.h"
 namespace s21 {
@@ -8,12 +8,12 @@ class Controller {
   Controller() = default;
   ~Controller() = default;
 
-  void setInput(std::string input);
-  void setX(std::string input);
-  std::string getResult();
+  void SetInput(std::string input);
+  void SetX(double x_val);
+  std::string GetResult();
 
  private:
-  Model model;
+  Model model_;
 };
 }  // namespace s21
-#endif
+#endif  // CPP3_SMARTCALC_V2_0_CONTROLLER_CONTROLLER_H_

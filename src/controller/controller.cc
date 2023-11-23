@@ -1,8 +1,10 @@
 #include "controller.h"
 namespace s21 {
 
-void Controller::setInput(std::string input) { model.setInput(input); }
+void Controller::SetInput(std::string input) { model_.SetInput(input); }
 
-std::string Controller::getResult() { return model.headCalc(); }
+void Controller::SetX(double x_val) { model_.SetX(x_val); }
+
+std::string Controller::GetResult() { return model_.GetResult(); }
 
 }  // namespace s21
